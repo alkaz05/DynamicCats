@@ -5,6 +5,14 @@ import java.util.Objects;
 public class Cat {
     String name, speech;
 
+    public String getName() {
+        return name;
+    }
+
+    public String getSpeech() {
+        return speech;
+    }
+
     public Cat(String name, String speech) {
         this.name = name;
         this.speech = speech;

@@ -29,6 +29,15 @@ public class HelloController {
     @FXML
     Label labelAlert;
 
+    @FXML
+    private Button addCatBtn;
+
+    @FXML
+    private TextField newCatName;
+
+    @FXML
+    private TextField newCatSpeech;
+
     Group group = new Group();
 
     public void initialize(){
@@ -43,6 +52,14 @@ public class HelloController {
             showTheCats();
         });
 
+        addCatBtn.setOnAction(actionEvent -> {
+            if(!newCatName.getText().isEmpty() && !newCatSpeech.getText().isEmpty()){
+                Cat newCat = new Cat(newCatName.getText(), newCatSpeech.getText());
+                group.getCats().add(newCat);
+                showOneCat(newCat);
+            }
+        });
+
     }
 
     public void showTheCats(){
@@ -50,15 +67,26 @@ public class HelloController {
         textArea1.appendText("\n"+group.getCats());*/
         boxForCats.getChildren().clear();                   //вытряхнем из контейнера дочерние элементы (если они там были)
         for (Cat cat: group.getCats()){
-            Label lab = new Label(cat.getName());           //создаем новые объекты граф интерфейса
-            Button bt = new Button(cat.getSpeech());        //и сразу задаем надписи на них
-            HBox box = new HBox();                          //объединяем надпись и кнопку в горизонтальный контейнер
-            box.getChildren().addAll(lab, bt);
-            boxForCats.getChildren().add(box);              //добавляем элементы в имеющийся на форме контейнер
-            //Описываем, что произойдет при нажатии данной конкретной кнопки (созданной выше)
-            bt.setOnAction(xx -> textArea1.appendText("\n"+cat.say()));
+            showOneCat(cat);
         }
 
+    }
+
+    private void showOneCat(Cat cat) {
+        Label lab = new Label(cat.getName());           //создаем новые объекты граф интерфейса
+        Button bt = new Button(cat.getSpeech());        //и сразу задаем надписи на них
+        HBox box = new HBox();                          //объединяем надпись и кнопку в горизонтальный контейнер
+        box.getChildren().addAll(lab, bt);
+        boxForCats.getChildren().add(box);              //добавляем элементы в имеющийся на форме контейнер
+        //Описываем, что произойдет при нажатии данной конкретной кнопки (созданной выше)
+        bt.setOnAction(xx -> textArea1.appendText("\n"+ cat.say()));
+
+        Button br = new Button("Брысь");
+        br.setOnAction(actionEvent -> {
+            group.getCats().remove(cat);
+            boxForCats.getChildren().remove(box);
+        });
+        box.getChildren().add(br);
     }
 
 }
